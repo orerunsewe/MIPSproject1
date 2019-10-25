@@ -29,3 +29,20 @@
             ConvertToDecimal:
                 add $t2, $zero, $a2       # Copy character at $a2 to temporary register $t2
                 addi $t3, $zero, 87       # Load $t3 with reference value 87 (ascii value of 'a' - 10) for conversion
+                bgt $t2, 'f', Return0     # If current character is greater than f, it is out of range. Go to Return0
+                bge $t2, 'a', Return1     # If current character is between 'a' and 'f', go to Return0 to convert
+
+
+
+            # This subroutine is returns a value of 0 in $v1. Used for out of range characters
+
+            Return0:
+                addi $v1, $zero, 0        # Load register $v1 with value 0
+                jr $ra                    # Return result in $v1 (0)
+
+
+            # This subroutine calculates the decimal value of the character
+            # The result is returned in $v1
+
+            Return1:
+                sub $v1, $t2, $t3         # subtract the the reference value in $t3 from the character's 1-byte ascii value
