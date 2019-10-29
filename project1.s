@@ -10,14 +10,16 @@
 
             la $s0, input_str             # Load register with address of input string
             add $t0, $zero, $zero         # Initialize the counter to equal 0
-            addi $t6, $zero, 11           # $t6 used to check for end of string 
+            addi $t6, $zero, 10           # $t6 used to check for end of string 
             add $t5, $zero, $zero         # Register which holds the sum initialized to 0
             Loop1:
                 add $t1, $t0, $s0         # Add counter to input address and store in $t1 to get the current character's address
                 lb $a2, 0($t1)            # Get current character in the string
                 jal ConvertToDecimal      # Jump to subroutine to get decimal value of the current character
                 add $t5, $t5, $v1         # Add the decimal value from conversion to the sum
-
+                beq $t0, $t6, PrintValue  # If counter is at the end of string, print sum
+                addi $t0, $t0, 1          # Increment counter by +1
+                j Loop1                   # reiterate
 
             # This subroutine is used to convert the string characters to their corresponding decimal values, treating each character as a base-N number
             # Conversions done based on formula N = 26 + (X % 11) where X is my StudentID: 02805400
