@@ -5,7 +5,7 @@
         main:
             li $v0, 8                     # Instruction to get user's input string
             la $a0, input_str             # Load register with address of input string
-            li $a1, 10                    # Read maximum of 10 characters from string (i.e. do not read null character)
+            li $a1, 11                    # Read maximum of 11 characters from string (include null character)
             syscall
 
             la $s0, input_str             # Load register with address of input string
@@ -29,9 +29,13 @@
             ConvertToDecimal:
                 add $t2, $zero, $a2       # Copy character at $a2 to temporary register $t2
                 addi $t3, $zero, 87       # Load $t3 with reference value 87 (ascii value of 'a' - 10) for conversion
-                bgt $t2, 'f', Return0     # If current character is greater than f, it is out of range. Go to Return0
-                bge $t2, 'a', Return1     # If current character is between 'a' and 'f', go to Return0 to convert
-
+                bgt $t2, 't', Return0     # If current character is greater than 't', it is out of range. Go to Return0
+                bge $t2, 'a', Return1     # If current character is between 'a' and 't', go to Return1 to convert
+                addi $t3, $zero, 55       # Change reference value to 55 for uppercase characters
+                bgt $t2, 'T', Return0     # If current character is greater than 'T', it is out of range. Go to Return0
+                bge $t2, 'A', Return 1    # If current character is between 'A' and 'T', go to Return1 to convert
+                addi $t3, $zero, 48       # Change reference value to 48 for numbers
+                bgt $t2, '9', Return0     # If current character is greater than '9' it is out of range. Go to Return0
 
 
             # This subroutine is returns a value of 0 in $v1. Used for out of range characters
@@ -46,3 +50,4 @@
 
             Return1:
                 sub $v1, $t2, $t3         # subtract the the reference value in $t3 from the character's 1-byte ascii value
+                jr $ra                    # Return the decimal value in $v1
