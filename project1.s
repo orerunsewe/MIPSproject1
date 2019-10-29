@@ -10,11 +10,13 @@
 
             la $s0, input_str             # Load register with address of input string
             add $t0, $zero, $zero         # Initialize the counter to equal 0
-
+            addi $t6, $zero, 11           # $t6 used to check for end of string 
+            add $t5, $zero, $zero         # Register which holds the sum initialized to 0
             Loop1:
                 add $t1, $t0, $s0         # Add counter to input address and store in $t1 to get the current character's address
                 lb $a2, 0($t1)            # Get current character in the string
                 jal ConvertToDecimal      # Jump to subroutine to get decimal value of the current character
+                add $t5, $t5, $v1         # Add the decimal value from conversion to the sum
 
 
             # This subroutine is used to convert the string characters to their corresponding decimal values, treating each character as a base-N number
@@ -33,10 +35,11 @@
                 bge $t2, 'a', Return1     # If current character is between 'a' and 't', go to Return1 to convert
                 addi $t3, $zero, 55       # Change reference value to 55 for uppercase characters
                 bgt $t2, 'T', Return0     # If current character is greater than 'T', it is out of range. Go to Return0
-                bge $t2, 'A', Return 1    # If current character is between 'A' and 'T', go to Return1 to convert
+                bge $t2, 'A', Return1     # If current character is between 'A' and 'T', go to Return1 to convert
                 addi $t3, $zero, 48       # Change reference value to 48 for numbers
                 bgt $t2, '9', Return0     # If current character is greater than '9' it is out of range. Go to Return0
-
+                bge $t2, '0', Return1     # If current char is between '0' and '9', go to Return1 to convert
+                blt $t2, '0', Return0     # For all other characters out of the range, convert to a value of 0
 
             # This subroutine is returns a value of 0 in $v1. Used for out of range characters
 
