@@ -61,7 +61,10 @@
                 li $v0, 1                 # System call to print an integer (the sum)
                 or $a0, $t5, 0            # Load register $a0 with the sum to in $t5 to be printed
                 syscall
-
                 j Exit                    # Jump to Exit
 
-          
+
+           # Subroutine to exit program
+            Exit:
+                li, $v0, 10               # System call to exit program
+                syscall
