@@ -58,7 +58,6 @@
 
            # This subroutine prints the decimal value of sum on a new line
           PrintValue:
-
                 li $v0, 11                # System call to print character
                 li $a0, 10                # Load $a0 with 10 (ascii value for newline character)
                 syscall
@@ -66,6 +65,7 @@
                 li $v0, 1                 # System call to print an integer (the sum)
                 or $a0, $t5, 0            # Load register $a0 with the sum to in $t5 to be printed
                 syscall
+                
                 j Exit                    # Jump to Exit
 
 
